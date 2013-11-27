@@ -114,10 +114,13 @@ Opcodes.OPCODES: [
     },
     {
         id: 0x09,
-        asm: 'ora #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'ora #$%.2x' : 'ora #%.4x';
+        },
         name: 'OR Accumulator with Memory',
         mode: Opcodes.OPTYPE.IMF,
-        bytes: 2,
+        bytes: 2, //should this be 2 or 3, based on above?
         cycles: 2
     {
         id: 0x0a,
@@ -371,7 +374,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0x29,
-        asm: 'and #$%a8.x',  //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'and #$%.2x' : 'and #%.4x';
+        },
         name: 'AND Accumulator with Memory',
         mode: Opcodes.OPTYPE.IMF,
         bytes: 2,
@@ -627,7 +633,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0x49,
-        asm: 'eor #$%a8.x',  //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'eor #$%.2x' : 'eor #%.4x';
+        },
         name: 'Exclusive-OR Accumulator with Memory',
         mode: Opcodes.OPTYPE.IMF,
         bytes: 2,
@@ -882,7 +891,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0x69,
-        asm: 'adc #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'adc #$%.2x' : 'adc #%.4x';
+        },
         name: 'Add With Carry',
         mode: Opcodes.OPTYPE.IIF,
         bytes: function() {
@@ -1141,7 +1153,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0x89,
-        asm: 'bit #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'bit #$%.2x' : 'bit #%.4x';
+        },
         name: 'Test Bits',
         mode: Opcodes.OPTYPE.IIF,
         bytes: 2,
@@ -1329,7 +1344,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xa0,
-        asm: 'ldy #$%x8.x', //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+            return (regs.e || regs.p.x) ? 'ldy #$%.2x' : 'ldy #%.4x';
+        },
         name: 'Load Index Register Y from Memory',
         mode: Opcodes.OPTYPE.IIF,
         bytes: 2,
@@ -1344,7 +1362,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xa2,
-        asm: 'ldx #$%.2x', //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+            return (regs.e || regs.p.x) ? 'ldx #$%.2x' : 'ldx #%.4x';
+        },
         name: 'Load Index Register X from Memory',
         mode: Opcodes.OPTYPE.IIF,
         bytes: 2,
@@ -1399,7 +1420,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xa9,
-        asm: 'lda #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'lda #$%.2x' : 'lda #%.4x';
+        },
         name: 'Load Accumulator from Memory',
         mode: Opcodes.OPTYPE.IIF,
         bytes: 2,
@@ -1583,7 +1607,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xc0,
-        asm: 'cpy #$%x8.x', //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+            return (regs.e || regs.p.x) ? 'cpy #$%.2x' : 'cpy #%.4x';
+        },
         name: 'Compare Index Register Y with Memory',
         mode: Opcodes.OPTYPE.IMF,
         bytes: 2,
@@ -1654,7 +1681,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xc9,
-        asm: 'cmp #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'cmp #$%.2x' : 'cmp #%.4x';
+        },
         name: 'Compare Accumulator with Memory',
         mode: Opcodes.OPTYPE.IACC,
         bytes: 2,
@@ -1838,7 +1868,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xe0,
-        asm: 'cpx #$%x8.x', //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.x), %.4x otherwise
+            return (regs.e || regs.p.x) ? 'cpx #$%.2x' : 'cpx #%.4x';
+        },
         name: 'Compare Index Register X with Memory',
         mode: Opcodes.OPTYPE.IMF,
         bytes: function(regs) {
@@ -1915,7 +1948,10 @@ Opcodes.OPCODES: [
     },
     {
         id: 0xe9,
-        asm: 'sbc #$%a8.x', //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+        asm: function(regs) {
+            //this will be %.2x if (regs.e || regs.p.m), %.4x otherwise
+            return (regs.e || regs.p.m) ? 'sbc #$%.2x' : 'sbc #%.4x';
+        },
         name: 'Subtract with Borrow from Accumulator',
         mode: Opcodes.OPTYPE.IIF,
         bytes: 2,
