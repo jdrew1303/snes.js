@@ -830,8 +830,14 @@ Opcodes.OPCODES: [
         asm: 'adc ($%.2x,x)',
         name: 'Add With Carry',
         mode: Opcodes.OPTYPE.IDPX,
-        bytes: 2,
-        cycles: 6 //Uses 3 cycles to shut the processor down: additional cycles are required by reset to restart it
+        bytes: function(regs) {
+            //Add 1 cycle if m=0 (16-bit memory/accumulator)
+            return 2 + (regs.p.m ? 0 : 1);
+        },
+        cycles: function(regs) {
+            //Add 1 cycle if low byte of Direct Page Register is non-zero
+            return 6 + (regs.d & 0xff ? 1 : 0);
+        }
     },
     {
         id: 0x62,
@@ -964,7 +970,8 @@ Opcodes.OPCODES: [
         mode: Opcodes.OPTYPE.IDPY,
         bytes: 2,
         cycles: function(regs) {
-            return 5; //Add 1 cycle if adding index crosses a page boundary...
+            //Add 1 cycle if adding index crosses a page boundary...
+            return 5;
         }
     },
     {
@@ -2133,3 +2140,20 @@ Opcodes.OPCODES: [
         cycles: 5
     }
 ];
+
+// The optables map the opcodes to an actual function
+
+// 8-bit accumulator,  8-bit index (emulation mode)
+Opcodes.OPTABLE_EM = [];
+
+// 8-bit accumulator,  8-bit index
+Opcodes.OPTABLE_MX = [];
+
+// 8-bit accumulator, 16-bit index
+Opcodes.OPTABLE_Mx = [];
+
+//16-bit accumulator,  8-bit index
+Opcodes.OPTABLE_mX = [];
+
+//16-bit accumulator, 16-bit index
+Opcodes.OPTABLE_mx = [];
