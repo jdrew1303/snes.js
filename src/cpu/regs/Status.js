@@ -1,4 +1,4 @@
-var StatusFlag = function(data) {
+var Status = function(data) {
     this.n = 0; //Negative, 1 = Negative
     this.v = 0; //Overflow, 1 = Overflow
     this.m = 0; //Accumulator Size, 0 = 16-bit, 1 = 8-bit
@@ -13,9 +13,9 @@ var StatusFlag = function(data) {
     this.set(data);
 };
 
-module.exports = StatusFlag;
+module.exports = Status;
 
-StatusFlag.prototype.MASKS = {
+Status.prototype.MASKS = {
     C: 0x01, //  1, Carry
     Z: 0x02, //  2, Zero
     I: 0x04, //  4, IRQ disable
@@ -25,10 +25,10 @@ StatusFlag.prototype.MASKS = {
     V: 0x40, // 64, Overflow
     N: 0x80, //128, Negative
     E: 0x00, //  0, 6502 Emulation Mode
-    B: 0x10, // 16, Break (emulation mode only)
+    B: 0x10  // 16, Break (emulation mode only)
 };
 
-StatusFlag.prototype.set = function(data) {
+Status.prototype.set = function(data) {
     data = data || 0;
 
     n = data & this.MASKS.N;
@@ -43,7 +43,7 @@ StatusFlag.prototype.set = function(data) {
     this._value = data;
 };
 
-Object.defineProperty(StatusFlag.prototype, 'value', {
+Object.defineProperty(Status.prototype, 'value', {
     get: function() {
         return this._value;
     },

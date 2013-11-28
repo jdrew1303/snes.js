@@ -3,7 +3,7 @@ var opcodes = {};
 module.exports = opcodes;
 
 //The optables map the opcodes to an actual function
-opcodes.tables = require('./ops/tables');
+opcodes.tables = require('./ops/optables');
 
 //The addressing type of an Opcode
 opcodes.OPTYPE: {
