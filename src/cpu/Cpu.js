@@ -1,6 +1,6 @@
 // 65816 Processor Emulator
 var Registers = require('./Registers'),
-    Opcodes = require('./Opcodes');
+    Opcodes = require('./opcodes');
 
 var Cpu = function() {
     this.regs = new Registers();

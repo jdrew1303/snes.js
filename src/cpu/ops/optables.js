@@ -1,10 +1,10 @@
 // The optables map the opcodes to an actual function
-var Optables = {};
+var optables = {};
 
-module.exports = Optables;
+module.exports = optables;
 
 //require all op implementations
-var ops = Optables.ops = {};
+var ops = optables.ops = {};
 [
     require('./algorithms'),
     require('./misc'),
@@ -14,41 +14,41 @@ var ops = Optables.ops = {};
     require('./write')
 ].forEach(function(v, i) {
     for(var k in v) {
-        Optables.ops[k] = v[k];
+        optables.ops[k] = v[k];
     }
 });
 
 // 8-bit accumulator,  8-bit index (emulation mode)
-Optables.OPTABLE_EM = [];
+optables.OPTABLE_EM = [];
 
 // 8-bit accumulator,  8-bit index
-Optables.OPTABLE_MX = [];
+optables.OPTABLE_MX = [];
 
 // 8-bit accumulator, 16-bit index
-Optables.OPTABLE_Mx = [];
+optables.OPTABLE_Mx = [];
 
 //16-bit accumulator,  8-bit index
-Optables.OPTABLE_mX = [];
+optables.OPTABLE_mX = [];
 
 //16-bit accumulator, 16-bit index
-Optables.OPTABLE_mx = [];
+optables.OPTABLE_mx = [];
 
 //helpers to add items to the proper tables.
-function opA(  id, name       ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name]; }
-function opAII(id, name, x, y ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name].bind(null, x, y); }
-function opE(  id, name       ) { Optables.OPTABLE_EM[id] = ops[name + '_e']; Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_n']; }
-function opEI( id, name, x    ) { Optables.OPTABLE_EM[id] = ops[name + '_e'].bind(null, x); Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_n'].bind(null, x); }
-function opEII(id, name, x, y ) { Optables.OPTABLE_EM[id] = ops[name + '_e'].bind(null, x, y); Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_n'].bind(null, x, y); }
-function opM(  id, name       ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = ops[name + '_b']; Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_w']; }
-function opMI( id, name, x    ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, x); Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x); }
-function opMII(id, name, x, y ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, x, y); Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x, y); }
-function opMF( id, name, fn   ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, ops[fn + '_b']); Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w']); }
-function opMFI(id, name, fn, x) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, ops[fn + '_b'], x); Optables.OPTABLE_mX[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w'], x); }
-function opX(  id, name       ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_mX[id] = ops[name + '_b']; Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mx[id] = ops[name + '_w']; }
-function opXI( id, name, x    ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, x); Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x); }
-function opXII(id, name, x, y ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, x, y); Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x, y); }
-function opXF( id, name, fn   ) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, ops[fn + '_b']); Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w']); }
-function opXFI(id, name, fn, x) { Optables.OPTABLE_EM[id] = Optables.OPTABLE_MX[id] = Optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, ops[fn + '_b'], x); Optables.OPTABLE_Mx[id] = Optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w'], x); }
+function opA(  id, name       ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name]; }
+function opAII(id, name, x, y ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name].bind(null, x, y); }
+function opE(  id, name       ) { optables.OPTABLE_EM[id] = ops[name + '_e']; optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_n']; }
+function opEI( id, name, x    ) { optables.OPTABLE_EM[id] = ops[name + '_e'].bind(null, x); optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_n'].bind(null, x); }
+function opEII(id, name, x, y ) { optables.OPTABLE_EM[id] = ops[name + '_e'].bind(null, x, y); optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_n'].bind(null, x, y); }
+function opM(  id, name       ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = ops[name + '_b']; optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_w']; }
+function opMI( id, name, x    ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, x); optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x); }
+function opMII(id, name, x, y ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, x, y); optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x, y); }
+function opMF( id, name, fn   ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, ops[fn + '_b']); optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w']); }
+function opMFI(id, name, fn, x) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_Mx[id] = ops[name + '_b'].bind(null, ops[fn + '_b'], x); optables.OPTABLE_mX[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w'], x); }
+function opX(  id, name       ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_mX[id] = ops[name + '_b']; optables.OPTABLE_Mx[id] = optables.OPTABLE_mx[id] = ops[name + '_w']; }
+function opXI( id, name, x    ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, x); optables.OPTABLE_Mx[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x); }
+function opXII(id, name, x, y ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, x, y); optables.OPTABLE_Mx[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, x, y); }
+function opXF( id, name, fn   ) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, ops[fn + '_b']); optables.OPTABLE_Mx[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w']); }
+function opXFI(id, name, fn, x) { optables.OPTABLE_EM[id] = optables.OPTABLE_MX[id] = optables.OPTABLE_mX[id] = ops[name + '_b'].bind(null, ops[fn + '_b'], x); optables.OPTABLE_Mx[id] = optables.OPTABLE_mx[id] = ops[name + '_w'].bind(null, ops[fn + '_w'], x); }
 
 //adds all the opcodes to the tables
 module.exports.initOpTable = function() {
