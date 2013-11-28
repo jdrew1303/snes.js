@@ -18,18 +18,18 @@ Cpu.prototype.constructor = Cpu;
 
 Cpu.prototype.updateTable = function() {
     if(this.regs.e) {
-        this.optable = Opcodes.OPTABLE_EM;
+        this.optable = Opcodes.tables.OPTABLE_EM;
     } else if(this.regs.p.m) {
         if(this.regs.p.x) {
-            this.optable = Opcodes.OPTABLE_MX;
+            this.optable = Opcodes.tables.OPTABLE_MX;
         } else {
-            this.optable = Opcodes.OPTABLE_Mx;
+            this.optable = Opcodes.tables.OPTABLE_Mx;
         }
     } else {
         if(this.regs.p.x) {
-            this.optable = Opcodes.OPTABLE_mX;
+            this.optable = Opcodes.tables.OPTABLE_mX;
         } else {
-            this.optable = Opcodes.OPTABLE_mx;
+            this.optable = Opcodes.tables.OPTABLE_mx;
         }
     }
 };

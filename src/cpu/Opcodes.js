@@ -2,6 +2,10 @@ var Opcodes = {};
 
 module.exports = Opcodes;
 
+//The optables map the opcodes to an actual function
+Opcodes.tables = require('./ops/tables');
+
+//The addressing type of an Opcode
 Opcodes.OPTYPE: {
     // ID               NAME                                FORM            EXAMPLE
     //--------------------------------------------------------------------------------------
@@ -35,6 +39,7 @@ Opcodes.OPTYPE: {
     BLKMV:      26  //Block move:                       dp,dp           MVN/MVP byte, byte
 };
 
+//Detailed information for all the opcodes
 Opcodes.OPCODES: [
     {
         id: 0x00,
@@ -2140,20 +2145,3 @@ Opcodes.OPCODES: [
         cycles: 5
     }
 ];
-
-// The optables map the opcodes to an actual function
-
-// 8-bit accumulator,  8-bit index (emulation mode)
-Opcodes.OPTABLE_EM = [];
-
-// 8-bit accumulator,  8-bit index
-Opcodes.OPTABLE_MX = [];
-
-// 8-bit accumulator, 16-bit index
-Opcodes.OPTABLE_Mx = [];
-
-//16-bit accumulator,  8-bit index
-Opcodes.OPTABLE_mX = [];
-
-//16-bit accumulator, 16-bit index
-Opcodes.OPTABLE_mx = [];
