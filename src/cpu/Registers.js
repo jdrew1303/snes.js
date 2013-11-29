@@ -26,4 +26,6 @@ var Registers = function() {
     this.vector = 0; //uint16, interrupt vector address (16-bit)
 };
 
+Registers.prototype.constructor = Registers;
+
 module.exports = Registers;

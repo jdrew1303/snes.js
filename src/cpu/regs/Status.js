@@ -13,6 +13,8 @@ var Status = function(data) {
     this.set(data);
 };
 
+Status.prototype.constructor = Status;
+
 module.exports = Status;
 
 Status.prototype.MASKS = {

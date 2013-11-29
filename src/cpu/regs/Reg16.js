@@ -3,6 +3,10 @@ var Reg16 = function(val) {
     this._w = 0;
 };
 
+Reg16.prototype.constructor = Reg16;
+
+module.exports = Reg16;
+
 Object.defineProperty(Reg16.prototype, 'l', {
     get: function() {
         return this._w & 0x00ff;

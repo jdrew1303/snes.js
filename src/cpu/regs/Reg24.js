@@ -3,6 +3,10 @@ var Reg24 = function() {
     this._d = 0;
 };
 
+Reg24.prototype.constructor = Reg24;
+
+module.exports = Reg24;
+
 Object.defineProperty(Reg24.prototype, 'l', {
     get: function() {
         return this._d & 0x000000ff;

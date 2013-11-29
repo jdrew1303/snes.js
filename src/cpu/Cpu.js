@@ -17,6 +17,8 @@ var Cpu = function() {
 
 Cpu.prototype.constructor = Cpu;
 
+module.exports = Cpu;
+
 Cpu.prototype.updateTable = function() {
     if(this.regs.e) {
         this.optable = opcodes.tables.OPTABLE_EM;
