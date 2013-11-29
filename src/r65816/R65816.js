@@ -17,19 +17,6 @@ var R65816 = function() {
     this.optable = null;
 
     this.opcodeTables = new OpcodeTable(this);
-
-    /* Virtuals to be overriden by CPU implementation
-
-    virtual void op_io() = 0;
-    virtual uint8_t op_read(uint32_t addr) = 0;
-    virtual void op_write(uint32_t addr, uint8_t data) = 0;
-    virtual void last_cycle() = 0;
-    virtual bool interrupt_pending() = 0;
-    virtual void op_irq();
-
-    virtual uint8 disassembler_read(uint32 addr) { return 0u; }
-
-    */
 };
 
 R65816.prototype.constructor = R65816;
@@ -61,6 +48,7 @@ R65816.prototype.op_write           = function(addr, data)  { /* Virtual, should
 R65816.prototype.last_cycle         = function()            { /* Virtual, should be overriden */ };
 R65816.prototype.interrupt_pending  = function()            { /* Virtual, should be overriden */ };
 //R65816.prototype.op_irq             = function()            { /* Virtual, should be overriden */ };
+R65816.prototype.disassembler_read  = function(addr)        { return 0; /* Virtual, should be overriden */ };
 
 ///////////////////////
 // The following use the above virtual functions
