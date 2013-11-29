@@ -1,5 +1,5 @@
 //require last_cycle()
-//require op_* (memory ops)
+var mem = require('../memory/memory');
 
 module.exports = {
     nop: function() {
@@ -9,7 +9,7 @@ module.exports = {
 
     wdm: function() {
         last_cycle();
-        op_readpc();
+        mem.readpc();
     },
 
     xba: function() {
@@ -24,11 +24,11 @@ module.exports = {
     },
 
     move_b: function(adjust) {
-        this.dp = op_readpc();
-        this.sp = op_readpc();
+        this.dp = mem.readpc();
+        this.sp = mem.readpc();
         this.regs.db = this.dp;
-        this.rd.l = op_readlong((this.sp << 16) | this.regs.x.w);
-        op_writelong((this.dp << 16) | this.regs.y.w, this.rd.l);
+        this.rd.l = mem.readlong((this.sp << 16) | this.regs.x.w);
+        mem.writelong((this.dp << 16) | this.regs.y.w, this.rd.l);
         op_io();
         this.regs.x.l += adjust;
         this.regs.y.l += adjust;
@@ -38,11 +38,11 @@ module.exports = {
     },
 
     move_w: function(adjust) {
-        this.dp = op_readpc();
-        this.sp = op_readpc();
+        this.dp = mem.readpc();
+        this.sp = mem.readpc();
         this.regs.db = this.dp;
-        this.rd.l = op_readlong((this.sp << 16) | this.regs.x.w);
-        op_writelong((this.dp << 16) | this.regs.y.w, this.rd.l);
+        this.rd.l = mem.readlong((this.sp << 16) | this.regs.x.w);
+        mem.writelong((this.dp << 16) | this.regs.y.w, this.rd.l);
         op_io();
         this.regs.x.w += adjust;
         this.regs.y.w += adjust;
@@ -52,31 +52,31 @@ module.exports = {
     },
 
     interrupt_e: function(vectorE, vectorN) {
-        op_readpc();
-        op_writestack(this.regs.pc.h);
-        op_writestack(this.regs.pc.l);
-        op_writestack(this.regs.p);
-        this.rd.l = op_readlong(vectorE + 0);
+        mem.readpc();
+        mem.writestack(this.regs.pc.h);
+        mem.writestack(this.regs.pc.l);
+        mem.writestack(this.regs.p);
+        this.rd.l = mem.readlong(vectorE + 0);
         this.regs.pc.b = 0;
         this.regs.p.i = 1;
         this.regs.p.d = 0;
         last_cycle();
-        this.rd.h = op_readlong(vectorE + 1);
+        this.rd.h = mem.readlong(vectorE + 1);
         this.regs.pc.w = this.rd.w;
     },
 
     interrupt_n: function(vectorE, vectorN) {
-        op_readpc();
-        op_writestack(this.regs.pc.b);
-        op_writestack(this.regs.pc.h);
-        op_writestack(this.regs.pc.l);
-        op_writestack(this.regs.p);
-        this.rd.l = op_readlong(vectorN + 0);
+        mem.readpc();
+        mem.writestack(this.regs.pc.b);
+        mem.writestack(this.regs.pc.h);
+        mem.writestack(this.regs.pc.l);
+        mem.writestack(this.regs.p);
+        this.rd.l = mem.readlong(vectorN + 0);
         this.regs.pc.b = 0x00;
         this.regs.p.i = 1;
         this.regs.p.d = 0;
         last_cycle();
-        this.rd.h = op_readlong(vectorN + 1);
+        this.rd.h = mem.readlong(vectorN + 1);
         this.regs.pc.w = this.rd.w;
     },
 
@@ -120,7 +120,7 @@ module.exports = {
     },
 
     pflag_e: function(mode) {
-        this.rd.l = op_readpc();
+        this.rd.l = mem.readpc();
         last_cycle();
         op_io();
         this.regs.p.value = (mode ? this.regs.p.value | this.rd.l : this.regs.p.value & ~this.rd.l);
@@ -133,7 +133,7 @@ module.exports = {
     },
 
     pflag_n: function(mode) {
-        this.rd.l = op_readpc();
+        this.rd.l = mem.readpc();
         last_cycle();
         op_io();
         this.regs.p.value = (mode ? this.regs.p.value | this.rd.l : this.regs.p.value & ~this.rd.l);
@@ -203,54 +203,54 @@ module.exports = {
     push_b: function(n) {
         op_io();
         last_cycle();
-        op_writestack(this.regs[n].l);
+        mem.writestack(this.regs[n].l);
     },
 
     push_w: function(n) {
         op_io();
-        op_writestack(this.regs[n].h);
+        mem.writestack(this.regs[n].h);
         last_cycle();
-        op_writestack(this.regs[n].l);
+        mem.writestack(this.regs[n].l);
     },
 
     phd_e: function() {
         op_io();
-        op_writestackn(this.regs.d.h);
+        mem.writestackn(this.regs.d.h);
         last_cycle();
-        op_writestackn(this.regs.d.l);
+        mem.writestackn(this.regs.d.l);
         this.regs.s.h = 0x01;
     },
 
     phd_n: function() {
         op_io();
-        op_writestackn(this.regs.d.h);
+        mem.writestackn(this.regs.d.h);
         last_cycle();
-        op_writestackn(this.regs.d.l);
+        mem.writestackn(this.regs.d.l);
     },
 
     phb: function() {
         op_io();
         last_cycle();
-        op_writestack(this.regs.db);
+        mem.writestack(this.regs.db);
     },
 
     phk: function() {
         op_io();
         last_cycle();
-        op_writestack(this.regs.pc.b);
+        mem.writestack(this.regs.pc.b);
     },
 
     php: function() {
         op_io();
         last_cycle();
-        op_writestack(this.regs.p);
+        mem.writestack(this.regs.p);
     },
 
     pull_b: function(n) {
         op_io();
         op_io();
         last_cycle();
-        this.regs[n].l = op_readstack();
+        this.regs[n].l = mem.readstack();
         this.regs.p.n = (this.regs[n].l & 0x80);
         this.regs.p.z = (this.regs[n].l == 0);
     },
@@ -258,9 +258,9 @@ module.exports = {
     pull_w: function(n) {
         op_io();
         op_io();
-        this.regs[n].l = op_readstack();
+        this.regs[n].l = mem.readstack();
         last_cycle();
-        this.regs[n].h = op_readstack();
+        this.regs[n].h = mem.readstack();
         this.regs.p.n = (this.regs[n].w & 0x8000);
         this.regs.p.z = (this.regs[n].w == 0);
     },
@@ -268,9 +268,9 @@ module.exports = {
     pld_e: function() {
         op_io();
         op_io();
-        this.regs.d.l = op_readstackn();
+        this.regs.d.l = mem.readstackn();
         last_cycle();
-        this.regs.d.h = op_readstackn();
+        this.regs.d.h = mem.readstackn();
         this.regs.p.n = (this.regs.d.w & 0x8000);
         this.regs.p.z = (this.regs.d.w == 0);
         this.regs.s.h = 0x01;
@@ -279,9 +279,9 @@ module.exports = {
     pld_n: function() {
         op_io();
         op_io();
-        this.regs.d.l = op_readstackn();
+        this.regs.d.l = mem.readstackn();
         last_cycle();
-        this.regs.d.h = op_readstackn();
+        this.regs.d.h = mem.readstackn();
         this.regs.p.n = (this.regs.d.w & 0x8000);
         this.regs.p.z = (this.regs.d.w == 0);
     },
@@ -290,7 +290,7 @@ module.exports = {
         op_io();
         op_io();
         last_cycle();
-        this.regs.db = op_readstack();
+        this.regs.db = mem.readstack();
         this.regs.p.n = (this.regs.db & 0x80);
         this.regs.p.z = (this.regs.db == 0);
     },
@@ -299,7 +299,7 @@ module.exports = {
         op_io();
         op_io();
         last_cycle();
-        this.regs.p.value = op_readstack() | 0x30;
+        this.regs.p.value = mem.readstack() | 0x30;
         if(this.regs.p.x) {
             this.regs.x.h = 0x00;
             this.regs.y.h = 0x00;
@@ -311,7 +311,7 @@ module.exports = {
         op_io();
         op_io();
         last_cycle();
-        this.regs.p.value = op_readstack();
+        this.regs.p.value = mem.readstack();
         if(this.regs.p.x) {
             this.regs.x.h = 0x00;
             this.regs.y.h = 0x00;
@@ -320,61 +320,61 @@ module.exports = {
     },
 
     pea_e: function() {
-        this.aa.l = op_readpc();
-        this.aa.h = op_readpc();
-        op_writestackn(this.aa.h);
+        this.aa.l = mem.readpc();
+        this.aa.h = mem.readpc();
+        mem.writestackn(this.aa.h);
         last_cycle();
-        op_writestackn(this.aa.l);
+        mem.writestackn(this.aa.l);
         this.regs.s.h = 0x01;
     },
 
     pea_n: function() {
-        this.aa.l = op_readpc();
-        this.aa.h = op_readpc();
-        op_writestackn(this.aa.h);
+        this.aa.l = mem.readpc();
+        this.aa.h = mem.readpc();
+        mem.writestackn(this.aa.h);
         last_cycle();
-        op_writestackn(this.aa.l);
+        mem.writestackn(this.aa.l);
     },
 
     pei_e: function() {
-        this.dp = op_readpc();
+        this.dp = mem.readpc();
         op_io_cond2();
-        this.aa.l = op_readdp(this.dp + 0);
-        this.aa.h = op_readdp(this.dp + 1);
-        op_writestackn(this.aa.h);
+        this.aa.l = mem.readdp(this.dp + 0);
+        this.aa.h = mem.readdp(this.dp + 1);
+        mem.writestackn(this.aa.h);
         last_cycle();
-        op_writestackn(this.aa.l);
+        mem.writestackn(this.aa.l);
         this.regs.s.h = 0x01;
     },
 
     pei_n: function() {
-        this.dp = op_readpc();
+        this.dp = mem.readpc();
         op_io_cond2();
-        this.aa.l = op_readdp(this.dp + 0);
-        this.aa.h = op_readdp(this.dp + 1);
-        op_writestackn(this.aa.h);
+        this.aa.l = mem.readdp(this.dp + 0);
+        this.aa.h = mem.readdp(this.dp + 1);
+        mem.writestackn(this.aa.h);
         last_cycle();
-        op_writestackn(this.aa.l);
+        mem.writestackn(this.aa.l);
     },
 
     per_e: function() {
-        this.aa.l = op_readpc();
-        this.aa.h = op_readpc();
+        this.aa.l = mem.readpc();
+        this.aa.h = mem.readpc();
         op_io();
         this.rd.w = this.regs.pc.d + this.aa.w;
-        op_writestackn(this.rd.h);
+        mem.writestackn(this.rd.h);
         last_cycle();
-        op_writestackn(this.rd.l);
+        mem.writestackn(this.rd.l);
         this.regs.s.h = 0x01;
     },
 
     per_n: function() {
-        this.aa.l = op_readpc();
-        this.aa.h = op_readpc();
+        this.aa.l = mem.readpc();
+        this.aa.h = mem.readpc();
         op_io();
         this.rd.w = this.regs.pc.d + this.aa.w;
-        op_writestackn(this.rd.h);
+        mem.writestackn(this.rd.h);
         last_cycle();
-        op_writestackn(this.rd.l);
+        mem.writestackn(this.rd.l);
     }
 };
