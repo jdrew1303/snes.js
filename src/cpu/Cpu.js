@@ -1,8 +1,9 @@
 var R65816 = require('../r65816/R65816'),
     Dma = require('./dma/Dma'),
+    CpuStatus = require('./CpuStatus'),
     Memory = require('./memory/Memory'),
     Mmio = require('./mmio/Mmio');
-    #include "timing/timing.hpp"
+    // #include "timing/timing.hpp"
 
 var Cpu = function(sfc) {
     this.sfc = sfc;
@@ -41,8 +42,14 @@ var Cpu = function(sfc) {
 };
 
 //inherit from r65816 processor
-Cpu.prototype = new R65816();
-Cpu.prototype.constructor = Cpu;
+Cpu.prototype = Object.create(R65816, {
+    constructor: {
+        value: Cpu,
+        enumerable: false,
+        writable: true,
+        configurable: true
+    }
+});
 
 module.exports = Cpu;
 
