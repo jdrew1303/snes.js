@@ -35,11 +35,11 @@
     "maxdepth"      : 6,        // Prohibit nested blocks from going more than X levels deep.
     "maxstatements" : false,    // Restrict the number of statements in a function.
     "maxcomplexity" : false,    // Restrict the cyclomatic complexity of the code.
-    "maxlen"        : 220,      // Require that all lines are 100 characters or less.
-    "globals"       : {         // Register globals that are used in the code.
-        "module": false,
-        "require": false
-    },
+    "maxlen"        : 120,      // Require that all lines are 100 characters or less.
+    "predef"        : [         // Register predefined globals used throughout the code.
+        // Predef Mocha BDD interface
+        "describe", "it", "before", "beforeEach", "after", "afterEach"
+    ],
 
     // == Relaxing Options ================================================
     //
@@ -48,12 +48,12 @@
     // doing.
 
     "asi"           : false,    // Tolerate Automatic Semicolon Insertion (no semicolons).
-    "boss"          : true,     // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
+    "boss"          : false,    // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
     "debug"         : false,    // Allow debugger statements e.g. browser breakpoints.
     "eqnull"        : false,    // Tolerate use of `== null`.
     "esnext"        : false,    // Allow ES.next specific features such as `const` and `let`.
     "evil"          : false,    // Tolerate use of `eval`.
-    "expr"          : false,    // Tolerate `ExpressionStatement` as Programs.
+    "expr"          : true,     // Tolerate `ExpressionStatement` as Programs.
     "funcscope"     : false,    // Tolerate declarations of variables inside of control structures while accessing them later from the outside.
     "globalstrict"  : false,    // Allow global "use strict" (also enables 'strict').
     "iterator"      : false,    // Allow usage of __iterator__ property.
@@ -77,13 +77,13 @@
     // popular JavaScript libraries and runtime environments—such as
     // browser or node.js.
 
-    "browser"       : true,     // Standard browser globals e.g. `window`, `document`.
+    "browser"       : false,    // Standard browser globals e.g. `window`, `document`.
     "couch"         : false,    // Enable globals exposed by CouchDB.
     "devel"         : false,    // Allow development statements e.g. `console.log();`.
     "dojo"          : false,    // Enable globals exposed by Dojo Toolkit.
     "jquery"        : false,    // Enable globals exposed by jQuery JavaScript library.
     "mootools"      : false,    // Enable globals exposed by MooTools JavaScript framework.
-    "node"          : true,     // Enable globals available when code is running inside of the NodeJS runtime environment. (for Gruntfile)
+    "node"          : true,     // Enable globals available when code is running inside of the NodeJS runtime environment.
     "nonstandard"   : false,    // Define non-standard but widely adopted globals such as escape and unescape.
     "prototypejs"   : false,    // Enable globals exposed by Prototype JavaScript framework.
     "rhino"         : false,    // Enable globals available when your code is running inside of the Rhino runtime environment.
